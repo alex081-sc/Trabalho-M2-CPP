@@ -14,7 +14,7 @@ typedef struct{
 int apresentar_menu();
 int ler_numero_inteiro(string);
 void iniciar_agenda(Data[]);
-
+void incluirComprimosso(Compromisso &);
 
 int main(){
     Data agenda[7];
@@ -114,7 +114,7 @@ int apresentar_menu(){
     return resp_int;
 }
 
-void iniciar_agenda(Data agenda[7]){
+void iniciar_agenda(Data agenda[]){
     int dia_comeco_mes = 1;
     cout << "--- Inicializar Agenda ---" << endl;
     agenda[0].dia = ler_numero_inteiro("Informe o dia de início: ", 1, 31);
@@ -135,4 +135,7 @@ void iniciar_agenda(Data agenda[7]){
         }
     }
 }
-//odajwopfawopifawjiopfawjf
+
+void incluirComprimosso(Compromisso &compromis){
+
+}
