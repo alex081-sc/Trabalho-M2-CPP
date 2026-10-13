@@ -20,7 +20,6 @@ int ler_numero_inteiro(string, int, int);
 void iniciar_agenda(Data[]);
 void mostrarTodosCompromissos(Data[], string[]);
 string ler_string();
-
 void incluirCompromisso(Data[]);
 int buscarIndiceDiaRec(Data [], int , int);
 
@@ -317,4 +316,3 @@ int buscarIndiceDiaRec(Data agenda[], int diaB, int indice) { //diaB = dia busca
 
 }
 */
-
