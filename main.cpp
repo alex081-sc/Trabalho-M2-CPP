@@ -9,9 +9,12 @@ typedef struct{
 typedef struct{
     int dia, mes, ano, qntd_compromissos;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 7dff78155d08010141c33f7d692bc938b91dcb37
+=======
+>>>>>>> 7d2ff330b34d1f99678a3e16f2cc009ddd18545e
     Compromisso compromissos[5];
 } Data;
 
@@ -19,12 +22,19 @@ int apresentar_menu();
 int ler_numero_inteiro(string);
 void iniciar_agenda(Data[]);
 <<<<<<< HEAD
+<<<<<<< HEAD
 void incluirCompromisso(Data[]);
 int buscarIndiceDiaRec(Data [], int , int);
 =======
 string ler_string(string);
 
 >>>>>>> 7dff78155d08010141c33f7d692bc938b91dcb37
+=======
+string ler_string(string);
+
+void incluirCompromisso(Data[]);
+int buscarIndiceDiaRec(Data [], int , int);
+>>>>>>> 7d2ff330b34d1f99678a3e16f2cc009ddd18545e
 
 int main(){
     Data agenda[7];
@@ -42,12 +52,19 @@ int main(){
             case 2:
                 system("cls");
 <<<<<<< HEAD
+<<<<<<< HEAD
                 incluirCompromisso(agenda);
 =======
                 cout << "escreva: " << endl;
                 ler_string(teste);
                 cout << "teste deu certo";
 >>>>>>> 7dff78155d08010141c33f7d692bc938b91dcb37
+=======
+                cout << "escreva: " << endl;
+                ler_string(teste);
+                cout << "teste deu certo";
+                incluirCompromisso(agenda);
+>>>>>>> 7d2ff330b34d1f99678a3e16f2cc009ddd18545e
                 system("pause");
             break;
             case 3:
@@ -166,8 +183,8 @@ void iniciar_agenda(Data agenda[]){
     char resp1;
     cout << "--- Inicializar Agenda ---" << endl;
 
-    dia = ler_numero_inteiro("Informe o dia de início: ", 1, 31);
-    mes = ler_numero_inteiro("Informe o mes de início: ", 1, 12);
+    dia = ler_numero_inteiro("Informe o dia de inÃ­cio: ", 1, 31);
+    mes = ler_numero_inteiro("Informe o mes de inÃ­cio: ", 1, 12);
     ano = ler_numero_inteiro("Informe o ano: ", 0, 2100);
 
     cout << "Confirme a data de inicio (" << dia << "/" << mes << "/" << ano << "): "; cin >> resp1;
@@ -207,6 +224,9 @@ void iniciar_agenda(Data agenda[]){
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7d2ff330b34d1f99678a3e16f2cc009ddd18545e
 void incluirCompromisso(Data agenda[]){
     int diaIn, hora_inicial, min_inicial, hora_final, min_final, indice;
     cout << "--- Incluir Compromisso ---\n";
@@ -256,5 +276,8 @@ int buscarIndiceDiaRec(Data agenda[], int diaB, int indice) { //diaB = dia busca
     // recusividade
     return buscarIndiceDiaRec(agenda, diaB, indice + 1);
 }
+<<<<<<< HEAD
 =======
 >>>>>>> 7dff78155d08010141c33f7d692bc938b91dcb37
+=======
+>>>>>>> 7d2ff330b34d1f99678a3e16f2cc009ddd18545e
