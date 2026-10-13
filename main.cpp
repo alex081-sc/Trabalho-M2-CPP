@@ -14,12 +14,16 @@ typedef struct{
 int apresentar_menu();
 int ler_numero_inteiro(string);
 void iniciar_agenda(Data[]);
+string ler_string(string);
+
 void incluirCompromisso(Data[]);
 int buscarIndiceDiaRec(Data [], int , int);
 
 int main(){
     Data agenda[7];
     int opcao;
+    string teste;
+    string dia_semana[7] = {"domingo", "segunda-feira", "terca-feira", "quarta,feira", "quinta-feira", "sexta-feira", "sabado"};
     do{
         system("cls");
         opcao = apresentar_menu();
@@ -27,10 +31,12 @@ int main(){
             case 1:
                 system("cls");
                 iniciar_agenda(agenda);
-
             break;
             case 2:
                 system("cls");
+                cout << "escreva: " << endl;
+                ler_string(teste);
+                cout << "teste deu certo";
                 incluirCompromisso(agenda);
                 system("pause");
             break;
@@ -48,7 +54,8 @@ int main(){
             case 5:
                 system("cls");
                 for(int i = 0; i<7; i++){
-                    cout << "[" << agenda[i].dia << "/" << agenda[i].mes << "]";
+                    cout << dia_semana[i] << endl;
+                    cout << "[" << agenda[i].dia << "/" << agenda[i].mes << "/" << agenda[i].ano << "]" << endl;
                 }
                 system("pause");
             break;
@@ -100,6 +107,34 @@ int ler_numero_inteiro(string mensagem, int minimo, int maximo){
     return numero;
 }
 
+string ler_string(string mensagem){
+    string texto;
+    bool valido = true;
+    cout << mensagem;
+    getline(cin, texto);
+    do{
+        // 1) tipo: so digitos, nao vazio, tamanho que cabe num int
+        if(texto.empty()){
+            valido = false;
+        }
+        else{
+            for(size_t i = 0; i < texto.size(); i++){
+                if(!isalpha(texto[i])){
+                    valido = false;
+                }
+            }
+        }
+
+        if(!valido){
+            system("cls");
+            cout << "Entrada invalida..." << endl;
+            system("pause");
+            return 0;
+        }
+    }while(!valido);
+    return texto;
+}
+
 int apresentar_menu(){
     int resp_int;
 
@@ -121,8 +156,8 @@ void iniciar_agenda(Data agenda[]){
     char resp1;
     cout << "--- Inicializar Agenda ---" << endl;
 
-    dia = ler_numero_inteiro("Informe o dia de início: ", 1, 31);
-    mes = ler_numero_inteiro("Informe o mes de início: ", 1, 12);
+    dia = ler_numero_inteiro("Informe o dia de inÃ­cio: ", 1, 31);
+    mes = ler_numero_inteiro("Informe o mes de inÃ­cio: ", 1, 12);
     ano = ler_numero_inteiro("Informe o ano: ", 0, 2100);
 
     cout << "Confirme a data de inicio (" << dia << "/" << mes << "/" << ano << "): "; cin >> resp1;
