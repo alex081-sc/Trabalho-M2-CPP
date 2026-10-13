@@ -3,3 +3,7 @@ bin/
 *.o
 *.exe
 *.cbp.local
+*.mdgit
+*.layout
+*.depend
+*.cbp
