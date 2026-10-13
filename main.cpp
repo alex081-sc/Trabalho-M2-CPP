@@ -335,3 +335,5 @@ void ordenar_vetor_horarioRec(Compromisso compromissos[], int n) {
 
     ordenar_vetor_horarioRec(compromissos, n - 1);
 }
+
+
