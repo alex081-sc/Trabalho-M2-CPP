@@ -24,6 +24,7 @@ void incluirCompromisso(Data[]);
 int buscarIndiceDiaRec(Data [], int , int);
 char ler_char();
 void ordenar_vetor_horarioRec(Compromisso [], int);
+int buscarCompromissoRec(Compromisso [], int, int, int);
 
 int main(){
     Data agenda[7];
@@ -334,4 +335,16 @@ void ordenar_vetor_horarioRec(Compromisso compromissos[], int n) {
     }
 
     ordenar_vetor_horarioRec(compromissos, n - 1);
+}
+
+int buscarCompromissoRec(Compromisso compromissos[], int horaB, int minB, int indice = 0) { // minB = minuto buscado, horaB = hora buscada
+    if (indice >= 5) {
+        return -1;
+    }
+
+    if (compromissos[indice].assunto != "" && compromissos[indice].inicio.hora == horaB && compromissos[indice].inicio.minuto == minB) {
+        return indice;
+    }
+
+    return buscarCompromissoRec(compromissos, horaB, minB, indice + 1);
 }
