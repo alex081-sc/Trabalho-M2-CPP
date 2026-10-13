@@ -1,1 +1,0 @@
-"# Trabalho-M2-CPP"  initgit add README.mdgit commit -m "first commit"git branch -M maingit remote add origin https://github.com/alex081-sc/Trabalho-M2-CPP.gitgit push -u origin main
