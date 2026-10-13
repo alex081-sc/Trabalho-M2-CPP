@@ -2,19 +2,20 @@
 using namespace std;
 
 typedef struct{
-    int hora_inicial, hora_final;
+    int hora_inicial, hora_final, min_inicial, min_final;
     string tipo, assunto, local;
 } Compromisso;
 
 typedef struct{
-    int dia, mes, ano, qntd_compromissos, dia_semana;
+    int dia, mes, ano, qntd_compromissos;
     Compromisso compromissos[5];
 } Data;
 
 int apresentar_menu();
 int ler_numero_inteiro(string);
 void iniciar_agenda(Data[]);
-void incluirComprimosso(Compromisso &);
+void incluirCompromisso(Data[]);
+int buscarIndiceDiaRec(Data [], int , int);
 
 int main(){
     Data agenda[7];
@@ -30,7 +31,7 @@ int main(){
             break;
             case 2:
                 system("cls");
-                cout << "caso 2" << endl;
+                incluirCompromisso(agenda);
                 system("pause");
             break;
             case 3:
@@ -115,27 +116,97 @@ int apresentar_menu(){
 }
 
 void iniciar_agenda(Data agenda[]){
-    int dia_comeco_mes = 1;
+    int primeira_data = 1;
+    int dia, mes, ano;
+    char resp1;
     cout << "--- Inicializar Agenda ---" << endl;
-    agenda[0].dia = ler_numero_inteiro("Informe o dia de início: ", 1, 31);
-    agenda[0].mes = ler_numero_inteiro("Informe o mes de início: ", 1, 12);
-    agenda[0].ano = ler_numero_inteiro("Informe o ano: ", 0, 2100);
 
+    dia = ler_numero_inteiro("Informe o dia de início: ", 1, 31);
+    mes = ler_numero_inteiro("Informe o mes de início: ", 1, 12);
+    ano = ler_numero_inteiro("Informe o ano: ", 0, 2100);
+
+    cout << "Confirme a data de inicio (" << dia << "/" << mes << "/" << ano << "): "; cin >> resp1;
+    cin.ignore();
+
+    if(resp1 == 'n'){
+        system("cls");
+        cout << "Data de inicio apagada, retornando..." << endl;
+        system("pause");
+        dia = 0;
+        mes = 0;
+        ano = 0;
+        return;
+    }else{
+        system("cls");
+        cout << "Agenda iniciada com sucesso!" << endl;
+        agenda[0].dia = dia;
+        agenda[0].mes = mes;
+        agenda[0].ano = ano;
+    }
     for(int i = 1; i < 7; i++){
         if(agenda[i-1].dia == 31){
-            agenda[i].dia = dia_comeco_mes;
-            agenda[i].mes = agenda[i-1].mes + 1;
-            agenda[i].ano = agenda[0].ano;
-            dia_comeco_mes++;
-
+            agenda[i].dia = primeira_data;
+            if(agenda[i-1].mes == 12){
+                agenda[i].mes = primeira_data;
+                agenda[i].ano = agenda[i-1].ano + 1;
+            }else{
+                agenda[i].mes = agenda[i-1].mes + 1;
+                agenda[i].ano = agenda[i-1].ano;
+            }
         }else{
             agenda[i].dia = agenda[i-1].dia + 1;
             agenda[i].mes = agenda[i-1].mes;
-            agenda[i].ano = agenda[0].ano;
+            agenda[i].ano = agenda[i-1].ano;
         }
     }
 }
 
-void incluirComprimosso(Compromisso &compromis){
+void incluirCompromisso(Data agenda[]){
+    int diaIn, hora_inicial, min_inicial, hora_final, min_final, indice;
+    cout << "--- Incluir Compromisso ---\n";
+    diaIn = ler_numero_inteiro("Data Inicial: ", 1, 31);
+    indice = buscarIndiceDiaRec(agenda, diaIn, 0);
 
+    if(indice == -1) {
+        cout << "Erro: Dia fora da semana da agenda!\n";
+        return;
+    }
+    hora_inicial = ler_numero_inteiro("Hora inicial: ", 0,23);
+    min_inicial = ler_numero_inteiro("Minuto inicial: ", 0,60);
+    hora_final  = ler_numero_inteiro("Hora final: ", 0,23);
+    min_final = ler_numero_inteiro("Minuto final: ", 0,60);
+    for(int j = 0; j < 5; j++){
+            if(hora_inicial >= agenda[indice].compromissos[j].hora_inicial || hora_final <= agenda[indice].compromissos[j].hora_final){
+                cout << "Funcionou";
+                agenda[indice].compromissos[j].hora_inicial = hora_inicial;
+                agenda[indice].compromissos[j].min_inicial = min_inicial;
+                agenda[indice].compromissos[j].hora_final = hora_final;
+                agenda[indice].compromissos[j].min_final = min_final;
+                cout << "Tipo: ";
+                getline(cin, agenda[indice].compromissos[j].tipo);
+                cout << "Assunto: ";
+                getline(cin, agenda[indice].compromissos[j].assunto);
+                cout << "Local: ";
+                getline(cin, agenda[indice].compromissos[j].local);
+                return;
+            }
+    }
+
+    cin.ignore();
+
+    cout << "Data ja ocupada!!";
+    return;
+}
+
+int buscarIndiceDiaRec(Data agenda[], int diaB, int indice) { //diaB = dia buscado
+    // caso chegue no final do vetor e nao ache
+    if (indice > 6) {
+        return -1;
+    }
+    // achou
+    if (agenda[indice].dia == diaB) {
+        return indice;
+    }
+    // recusividade
+    return buscarIndiceDiaRec(agenda, diaB, indice + 1);
 }
