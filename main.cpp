@@ -22,6 +22,8 @@ void mostrarTodosCompromissos(Data[], string[]);
 string ler_string();
 void incluirCompromisso(Data[]);
 int buscarIndiceDiaRec(Data [], int , int);
+char ler_char();
+void ordenar_vetor_horarioRec(Compromisso [], int);
 
 int main(){
     Data agenda[7];
@@ -76,7 +78,7 @@ int ler_numero_inteiro(string mensagem, int minimo, int maximo){
         valido = true;
         cout << mensagem;
         getline(cin, texto);
-        
+
         if(texto.empty()){
             valido = false;
         }
@@ -88,7 +90,7 @@ int ler_numero_inteiro(string mensagem, int minimo, int maximo){
             }
         }
 
-        
+
         if(valido){
             numero = stoi(texto);
             if(numero < minimo || numero > maximo){
@@ -157,7 +159,6 @@ char ler_char(){
     return caracter;
 }
 
-
 int apresentar_menu(){
     int resp_int;
 
@@ -179,8 +180,8 @@ void iniciar_agenda(Data agenda[]){
     char resp1;
     cout << "--- Inicializar Agenda ---" << endl;
 
-    dia = ler_numero_inteiro("Informe o dia de início (DD): ", 1, 31);
-    mes = ler_numero_inteiro("Informe o mes de início (MM): ", 1, 12);
+    dia = ler_numero_inteiro("Informe o dia de inicio (DD): ", 1, 31);
+    mes = ler_numero_inteiro("Informe o mes de inicio (MM): ", 1, 12);
     ano = ler_numero_inteiro("Informe o ano (AAAA): ", 1900, 2100);
 
     do{
@@ -231,14 +232,14 @@ void incluirCompromisso(Data agenda[]){
     cout << "--- Incluir Compromisso ---\n";
     diaIn = ler_numero_inteiro("Data Inicial: ", 1, 31);
     indice = buscarIndiceDiaRec(agenda, diaIn, 0);
-    
+
 
     if(indice == -1) {
         cout << "Erro: Dia fora da semana da agenda!\n";
         return;
     }
     if(agenda[indice].qntd_compromissos > 5){
-        cout << "A agenda está lotada." << endl;
+        cout << "A agenda esta lotada." << endl;
         return;
     }else{
         hora_inicial = ler_numero_inteiro("Hora inicial: ", 0,23);
@@ -247,18 +248,19 @@ void incluirCompromisso(Data agenda[]){
         min_final = ler_numero_inteiro("Minuto final: ", 0,60);
         for(int j = agenda[indice].qntd_compromissos; j < 5; j++){
             if(hora_inicial >= agenda[indice].compromissos[j].fim.hora || hora_final <= agenda[indice].compromissos[j].fim.hora){
-                cout << "Funcionou" << endl;
                 agenda[indice].compromissos[j].inicio.hora = hora_inicial;
                 agenda[indice].compromissos[j].inicio.minuto = min_inicial;
                 agenda[indice].compromissos[j].fim.hora = hora_final;
                 agenda[indice].compromissos[j].fim.minuto = min_final;
+
                 cout << "Tipo: ";
-                getline(cin, agenda[indice].compromissos[j].tipo);
+                agenda[indice].compromissos[j].tipo = ler_string();
                 cout << "Assunto: ";
-                getline(cin, agenda[indice].compromissos[j].assunto);
+                agenda[indice].compromissos[j].assunto= ler_string();
                 cout << "Local: ";
-                getline(cin, agenda[indice].compromissos[j].local);
-                agenda[indice].qntd_compromissos ++;
+                agenda[indice].compromissos[j].local= ler_string();
+                agenda[indice].qntd_compromissos++;
+                ordenar_vetor_horarioRec(agenda[indice].compromissos, agenda[indice].qntd_compromissos);
                 cout << "Evento criado com sucesso!!" << endl;
                 return;
             }
@@ -279,7 +281,7 @@ void mostrarTodosCompromissos(Data agenda[], string dia_semana[]){
             cout << "Nenhum evento agendado." << endl;
         }else{
             for(int j = 0; j < agenda[i].qntd_compromissos; j++){
-                cout << agenda[i].compromissos[j].inicio.hora << "h" << agenda[i].compromissos[j].inicio.minuto << " até ";
+                cout << agenda[i].compromissos[j].inicio.hora << "h" << agenda[i].compromissos[j].inicio.minuto << " ate ";
                 cout << agenda[i].compromissos[j].fim.hora << "h" << agenda[i].compromissos[j].fim.minuto << endl;
                 cout << agenda[i].compromissos[j].tipo << endl;
                 cout << agenda[i].compromissos[j].local << endl;
@@ -287,14 +289,10 @@ void mostrarTodosCompromissos(Data agenda[], string dia_semana[]){
                 if(agenda[i].qntd_compromissos > 1){
                     cout << "--------------" << endl;
                 }
-            }               
+            }
         }
     }
 }
-
-
-
-
 
 int buscarIndiceDiaRec(Data agenda[], int diaB, int indice) { //diaB = dia buscado
     // caso chegue no final do vetor e nao ache
@@ -309,10 +307,31 @@ int buscarIndiceDiaRec(Data agenda[], int diaB, int indice) { //diaB = dia busca
     return buscarIndiceDiaRec(agenda, diaB, indice + 1);
 }
 
-/*void ordenar_vetor_horarioRec(Data agenda,  int horario_inic, int horario_final){
-    if(agenda[agenda] > )
-    
+void ordenar_vetor_horarioRec(Compromisso compromissos[], int n) {
+    if (n <= 1) {
+        return;
+    }
 
+    for (int i = 0; i < n - 1; i++) {
+        bool trocar = false;
 
+        if (compromissos[i].assunto == "" && compromissos[i+1].assunto != "") {
+            trocar = true;
+        }
+        else if (compromissos[i].assunto != "" && compromissos[i+1].assunto != "") {
+
+            if (compromissos[i].inicio.hora > compromissos[i+1].inicio.hora ||
+               (compromissos[i].inicio.hora == compromissos[i+1].inicio.hora && compromissos[i].inicio.minuto > compromissos[i+1].inicio.minuto)) {
+                trocar = true;
+            }
+        }
+
+        if (trocar) {
+            Compromisso temp = compromissos[i];
+            compromissos[i] = compromissos[i+1];
+            compromissos[i+1] = temp;
+        }
+    }
+
+    ordenar_vetor_horarioRec(compromissos, n - 1);
 }
-*/
