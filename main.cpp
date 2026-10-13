@@ -8,18 +8,29 @@ typedef struct{
 
 typedef struct{
     int dia, mes, ano, qntd_compromissos;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7dff78155d08010141c33f7d692bc938b91dcb37
     Compromisso compromissos[5];
 } Data;
 
 int apresentar_menu();
 int ler_numero_inteiro(string);
 void iniciar_agenda(Data[]);
+<<<<<<< HEAD
 void incluirCompromisso(Data[]);
 int buscarIndiceDiaRec(Data [], int , int);
+=======
+string ler_string(string);
+
+>>>>>>> 7dff78155d08010141c33f7d692bc938b91dcb37
 
 int main(){
     Data agenda[7];
     int opcao;
+    string teste;
+    string dia_semana[7] = {"domingo", "segunda-feira", "terca-feira", "quarta,feira", "quinta-feira", "sexta-feira", "sabado"};
     do{
         system("cls");
         opcao = apresentar_menu();
@@ -27,11 +38,16 @@ int main(){
             case 1:
                 system("cls");
                 iniciar_agenda(agenda);
-
             break;
             case 2:
                 system("cls");
+<<<<<<< HEAD
                 incluirCompromisso(agenda);
+=======
+                cout << "escreva: " << endl;
+                ler_string(teste);
+                cout << "teste deu certo";
+>>>>>>> 7dff78155d08010141c33f7d692bc938b91dcb37
                 system("pause");
             break;
             case 3:
@@ -48,7 +64,8 @@ int main(){
             case 5:
                 system("cls");
                 for(int i = 0; i<7; i++){
-                    cout << "[" << agenda[i].dia << "/" << agenda[i].mes << "]";
+                    cout << dia_semana[i] << endl;
+                    cout << "[" << agenda[i].dia << "/" << agenda[i].mes << "/" << agenda[i].ano << "]" << endl;
                 }
                 system("pause");
             break;
@@ -98,6 +115,34 @@ int ler_numero_inteiro(string mensagem, int minimo, int maximo){
         }
     }while(!valido);
     return numero;
+}
+
+string ler_string(string mensagem){
+    string texto;
+    bool valido = true;
+    cout << mensagem;
+    getline(cin, texto);
+    do{
+        // 1) tipo: so digitos, nao vazio, tamanho que cabe num int
+        if(texto.empty()){
+            valido = false;
+        }
+        else{
+            for(size_t i = 0; i < texto.size(); i++){
+                if(!isalpha(texto[i])){
+                    valido = false;
+                }
+            }
+        }
+
+        if(!valido){
+            system("cls");
+            cout << "Entrada invalida..." << endl;
+            system("pause");
+            return 0;
+        }
+    }while(!valido);
+    return texto;
 }
 
 int apresentar_menu(){
@@ -161,6 +206,7 @@ void iniciar_agenda(Data agenda[]){
     }
 }
 
+<<<<<<< HEAD
 void incluirCompromisso(Data agenda[]){
     int diaIn, hora_inicial, min_inicial, hora_final, min_final, indice;
     cout << "--- Incluir Compromisso ---\n";
@@ -210,3 +256,5 @@ int buscarIndiceDiaRec(Data agenda[], int diaB, int indice) { //diaB = dia busca
     // recusividade
     return buscarIndiceDiaRec(agenda, diaB, indice + 1);
 }
+=======
+>>>>>>> 7dff78155d08010141c33f7d692bc938b91dcb37
