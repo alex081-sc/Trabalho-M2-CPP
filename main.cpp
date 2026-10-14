@@ -15,17 +15,22 @@ typedef struct{
     Compromisso compromissos[5];
 } Data;
 
-int apresentar_menu();
+// Subrotina entradas
 int ler_numero_inteiro(string, int, int);
-void iniciar_agenda(Data[]);
-void mostrarTodosCompromissos(Data[], string[]);
 string ler_string();
-void incluirCompromisso(Data[]);
-int buscarIndiceDiaRec(Data [], int , int);
 char ler_char();
-void ordenar_vetor_horarioRec(Compromisso [], int);
-int buscarCompromissoRec(Compromisso [], int, int, int);
+
+// Subrotinas operações
+int apresentar_menu();
+void iniciar_agenda(Data []);
+void incluirCompromisso(Data []);
+void excluirCompromisso(Data []);
 void mostrarCompromisso(Data []);
+void mostrarTodosCompromissos(Data [], string []);
+void ordenar_vetor_horarioRec(Compromisso [], int);
+int buscarCompromissoRec(Compromisso [], int, int, int = 0);
+int buscarIndiceDiaRec(Data [], int , int);
+void ImprimirCompromissoNaTela(Data [], int, int);
 
 int main(){
     Data agenda[7];
@@ -39,6 +44,7 @@ int main(){
             case 1:
                 system("cls");
                 iniciar_agenda(agenda);
+                system("pause");
             break;
             case 2:
                 system("cls");
@@ -47,7 +53,7 @@ int main(){
             break;
             case 3:
                 system("cls");
-                cout << "caso 3" << endl;
+                excluirCompromisso(agenda);
                 system("pause");
             break;
 
@@ -63,7 +69,7 @@ int main(){
             break;
             case 6:
                 system("cls");
-                cout << "tchauu" << endl;
+                cout << "Vejo você novamente em breve!" << endl;
                 system("pause");
             break;
         }
@@ -102,12 +108,11 @@ int ler_numero_inteiro(string mensagem, int minimo, int maximo){
 
         if(!valido){
             if(mensagem == "Digite a opcao: "){
-                system("cls");
-                cout << "Entrada invalida..." << endl;
+                cout << "Entrada invalida, ";
                 system("pause");
                 return -1; //para não apagar o menu principal caso o usuário coloque algo errado.
             }else{
-            cout << "Entrada invalida..." << endl;
+            cout << "Entrada invalida...";
             valido = false;
             }
         }
@@ -115,24 +120,26 @@ int ler_numero_inteiro(string mensagem, int minimo, int maximo){
     return numero;
 }
 
-string ler_string(){
+string ler_string(string mensagem){
     string texto;
-    bool valido = true;
-    getline(cin, texto);
+    bool valido;
     do{
+        valido = true;
+        cout << mensagem;
+        getline(cin, texto);
         if(texto.empty()){
             valido = false;
         }
         else{
             for(size_t i = 0; i < texto.size(); i++){
-                if(!isalpha(texto[i])){
+                if(!isalpha(texto[i]) && !ispunct(texto[i]) && !isspace(texto[i])){
                     valido = false;
                 }
             }
         }
 
         if(!valido){
-            cout << "Entrada invalida..." << endl;
+            cout << "Erro: Entrada invalida, tente novamente..." << endl;
             system("pause");
             valido = false;
         }
@@ -142,10 +149,11 @@ string ler_string(){
 
 char ler_char(){
     char caracter;
-    bool valido = true;
-    cin >> caracter;
-    caracter = toupper(caracter);
+    bool valido;
     do{
+        valido = true;
+        cin >> caracter;
+        caracter = toupper(caracter);
         if(caracter == ' '){
             valido = false;
         }else if(!isalpha(caracter)){
@@ -162,16 +170,14 @@ char ler_char(){
 
 int apresentar_menu(){
     int resp_int;
-
     cout << "--- AGENDA SEMANAL ---" << endl;
     cout << "1. Inicializar data" << endl;
     cout << "2. Incluir novo compromisso" << endl;
-    cout << "3. Excluir novo compromisso" << endl;
+    cout << "3. Excluir compromisso" << endl;
     cout << "4. Consultar compromissos de um dia" << endl;
     cout << "5. Consultar todos os compromissos" << endl;
     cout << "6. Sair" << endl;
     resp_int = ler_numero_inteiro("Digite a opcao: ", 1, 6);
-
     return resp_int;
 }
 
@@ -189,7 +195,7 @@ void iniciar_agenda(Data agenda[]){
         cout << "Deseja adicionar essa data de inicio?(" << dia << "/" << mes << "/" << ano << ") S/N: ";
         resp1 = ler_char();
         if(resp1 != 'S' && resp1 != 'N'){
-            cout << "Resposta invalida... Tente novamente" << endl;
+            cout << "Erro: Resposta invalida, tente novamente..." << endl;
         }
     }while(resp1 != 'S' && resp1 != 'N');
 
@@ -198,7 +204,6 @@ void iniciar_agenda(Data agenda[]){
     if(resp1 == 'N'){
         system("cls");
         cout << "Data de inicio apagada, retornando..." << endl;
-        system("pause");
         dia = 0;
         mes = 0;
         ano = 0;
@@ -231,11 +236,13 @@ void iniciar_agenda(Data agenda[]){
 void incluirCompromisso(Data agenda[]){
     int hora_inicial, min_inicial, hora_final, min_final, horaIR, horaFR;
     cout << "--- Incluir Compromisso ---\n";
-    int diaIn = ler_numero_inteiro("Data Inicial: ", 1, 31);
+    cout << "escolha de " << agenda[0].dia << "/" << agenda[0].mes << "/" << agenda[0].ano << " ate " << agenda[6].dia << "/" << agenda[6].mes << "/" << agenda[6].ano << endl;
+    int diaIn = ler_numero_inteiro("Dia: ", 1, 31);
+
     int indice = buscarIndiceDiaRec(agenda, diaIn, 0);
 
     if(indice == -1) {
-        cout << "Erro: Dia fora da semana da agenda!\n";
+        cout << "\nErro: Dia fora da semana da agenda!\n";
         return;
     }
     if(agenda[indice].qntd_compromissos >= 5){
@@ -263,42 +270,117 @@ void incluirCompromisso(Data agenda[]){
     agenda[indice].compromissos[agenda[indice].qntd_compromissos].fim.hora = hora_final;
     agenda[indice].compromissos[agenda[indice].qntd_compromissos].fim.minuto = min_final;
 
-    cout << "Tipo: ";
-    agenda[indice].compromissos[agenda[indice].qntd_compromissos].tipo = ler_string();
-    cout << "Assunto: ";
-    agenda[indice].compromissos[agenda[indice].qntd_compromissos].assunto= ler_string();
-    cout << "Local: ";
-    agenda[indice].compromissos[agenda[indice].qntd_compromissos].local= ler_string();
+    //cout << "Tipo: ";
+    agenda[indice].compromissos[agenda[indice].qntd_compromissos].tipo = ler_string("Tipo:");
+    //cout << "Assunto: ";
+    agenda[indice].compromissos[agenda[indice].qntd_compromissos].assunto= ler_string("Assunto: ");
+    //cout << "Local: ";
+    agenda[indice].compromissos[agenda[indice].qntd_compromissos].local= ler_string("Local: ");
     agenda[indice].qntd_compromissos++;
     ordenar_vetor_horarioRec(agenda[indice].compromissos, agenda[indice].qntd_compromissos);
     cout << "Evento criado com sucesso!!" << endl;
+}
 
-    return;
+void excluirCompromisso(Data agenda[]){
+    cout << "--- Excluir Compromisso ---" << endl;
+
+    int dia, indice, indice_compromisso, hora_inicial, min_inicial;
+    string minutoI, minutoF;
+    char resp;
+
+    cout << "escolha de " << agenda[0].dia << "/" << agenda[0].mes << "/" << agenda[0].ano << " até " << agenda[6].dia << "/" << agenda[6].mes << "/" << agenda[6].ano << endl;
+    dia = ler_numero_inteiro("Informe o dia de inicio (DD): ", 1, 31);
+    indice = buscarIndiceDiaRec(agenda, dia, 0);
+
+    if(indice == -1) { // se for -1, não achou o dia;
+        system("cls");
+        cout << "Erro: Dia fora da semana da agenda!\n";
+        return;
+    }
+
+    hora_inicial = ler_numero_inteiro("Hora inicial: ", 0,23);
+    min_inicial = ler_numero_inteiro("Minuto inicial: ", 0,59);
+    indice_compromisso = buscarCompromissoRec(agenda[indice].compromissos, hora_inicial, min_inicial);
+
+    if(indice_compromisso == -1){ // se for -1, não achou o compromisso;
+        system("cls");
+        cout << "Erro: Compromisso nao encontrado\n";
+        return;
+    }
+
+    // Mostrando o compromisso escolhido;
+    ImprimirCompromissoNaTela(agenda, indice, indice_compromisso);
+
+    do{
+        cout << "Realmente deseja excluir esse compromisso?(" << dia << "/" << agenda[indice].mes << "/" << agenda[indice].ano << ") S/N: ";
+        resp = ler_char();
+        if(resp != 'S' && resp != 'N'){
+            cout << "Erro: Resposta invalida, tente novamente..." << endl;
+            system("pause");
+        }
+    }while(resp != 'S' && resp != 'N');
+
+    if(resp == 'N'){
+        system("cls");
+        cout << "Erro: Exclusão de compromisso cancelado, retornando..." << endl;
+    }else{
+        if(agenda[indice].qntd_compromissos > 1){
+            for(int i = indice_compromisso; i < agenda[indice].qntd_compromissos - 1; i++){
+                agenda[indice].compromissos[i].inicio.hora = agenda[indice].compromissos[i+1].inicio.hora;
+                agenda[indice].compromissos[i].inicio.minuto = agenda[indice].compromissos[i+1].inicio.minuto;
+                agenda[indice].compromissos[i].fim.hora = agenda[indice].compromissos[i+1].fim.hora;
+                agenda[indice].compromissos[i].fim.minuto = agenda[indice].compromissos[i+1].fim.minuto;
+                agenda[indice].compromissos[i].assunto = agenda[indice].compromissos[i+1].assunto;
+                agenda[indice].compromissos[i].tipo = agenda[indice].compromissos[i+1].tipo;
+                agenda[indice].compromissos[i].local = agenda[indice].compromissos[i+1].local;
+            }
+            agenda[indice].qntd_compromissos--;
+        }else{
+                agenda[indice].qntd_compromissos = 0;
+        }
+        cout << "Compromisso excluido com sucesso!" << endl;
+     }
+}
+
+void mostrarCompromisso(Data agenda[]){
+    cout << "--- Mostrar Compromisso ---" << endl;
+    int dia, indice, indice_compromisso, hora_inicial, min_inicial;
+    string minutoI, minutoF;
+    dia = ler_numero_inteiro("Informe o dia de inicio (DD): ", 1, 31);
+    indice = buscarIndiceDiaRec(agenda, dia, 0);
+
+    if(indice == -1) {
+        system("cls");
+        cout << "Erro: Dia fora da semana da agenda!\n";
+        return;
+    }
+
+    hora_inicial = ler_numero_inteiro("Hora inicial: ", 0,23);
+    min_inicial = ler_numero_inteiro("Minuto inicial: ", 0,59);
+    indice_compromisso = buscarCompromissoRec(agenda[indice].compromissos, hora_inicial, min_inicial);
+    ImprimirCompromissoNaTela(agenda, indice, indice_compromisso);
+    cout << "===============" << endl;
 }
 
 void mostrarTodosCompromissos(Data agenda[], string dia_semana[]){
     string minutoI, minutoF;
+    cout << "--- Mostrar Todos os Compromissos ---" << endl;
     for(int i = 0; i<7; i++){
         cout << "===============" << endl;
         cout << "[" << agenda[i].dia << "/" << agenda[i].mes << "]" << endl;
         cout << dia_semana[i] << endl;
-        if(agenda[i].compromissos[i].tipo.empty()){ // se não tem nenhum tipo não existe evento pq nao foi iniciado.
-            cout << "Nenhum evento agendado." << endl;
+        if(agenda[i].qntd_compromissos == 0){
+            cout << "Nenhum compromisso agendado." << endl;
         }else{
             for(int j = 0; j < agenda[i].qntd_compromissos; j++){
-                minutoI = to_string(agenda[i].compromissos[j].inicio.minuto);
-                minutoF = to_string(agenda[i].compromissos[j].fim.minuto);
-                cout << agenda[i].compromissos[j].inicio.hora << "h" << (agenda[i].compromissos[j].inicio.minuto < 10 ? "0"+minutoI : minutoI)<< " ate ";
-                cout << agenda[i].compromissos[j].fim.hora << "h" << (agenda[i].compromissos[j].fim.minuto < 10 ?  "0"+minutoF : minutoF) << endl;
-                cout << agenda[i].compromissos[j].tipo << endl;
-                cout << agenda[i].compromissos[j].local << endl;
-                cout << agenda[i].compromissos[j].assunto << endl;
+                ImprimirCompromissoNaTela(agenda, i, j);
                 if(agenda[i].qntd_compromissos > 1){
                     cout << "--------------" << endl;
                 }
             }
         }
     }
+    cout << "===============" << endl;
 }
 
 int buscarIndiceDiaRec(Data agenda[], int diaB, int indice = 0) { //diaB = dia buscado
@@ -343,7 +425,7 @@ void ordenar_vetor_horarioRec(Compromisso compromissos[], int n) {
     ordenar_vetor_horarioRec(compromissos, n - 1);
 }
 
-int buscarCompromissoRec(Compromisso compromissos[], int horaB, int minB, int indice = 0) { // minB = minuto buscado, horaB = hora buscada
+int buscarCompromissoRec(Compromisso compromissos[], int horaB, int minB, int indice) { // minB = minuto buscado, horaB = hora buscada
     if (indice >= 5) {
         return -1;
     }
@@ -355,24 +437,9 @@ int buscarCompromissoRec(Compromisso compromissos[], int horaB, int minB, int in
     return buscarCompromissoRec(compromissos, horaB, minB, indice + 1);
 }
 
-void mostrarCompromisso(Data agenda[]){
-    int dia, indice, indice_compromisso, hora_inicial, min_inicial;
-    string minutoI, minutoF;
-    dia = ler_numero_inteiro("Informe o dia de inicio (DD): ", 1, 31);
-    indice = buscarIndiceDiaRec(agenda, dia, 0);
-
-    if(indice == -1) {
-        cout << "Erro: Dia fora da semana da agenda!\n";
-        return;
-    }
-
-    hora_inicial = ler_numero_inteiro("Hora inicial: ", 0,23);
-    min_inicial = ler_numero_inteiro("Minuto inicial: ", 0,59);
-    indice_compromisso = buscarCompromissoRec(agenda[indice].compromissos, hora_inicial, min_inicial);
-
-    minutoI = to_string(agenda[indice].compromissos[indice_compromisso].inicio.minuto);
-    minutoF = to_string(agenda[indice].compromissos[indice_compromisso].fim.minuto);
-
+void ImprimirCompromissoNaTela(Data agenda[], int indice, int indice_compromisso){
+    string minutoI = to_string(agenda[indice].compromissos[indice_compromisso].inicio.minuto);
+    string minutoF = to_string(agenda[indice].compromissos[indice_compromisso].fim.minuto);
     cout << "===============" << endl;
     cout << "[" << agenda[indice].dia << "/" << agenda[indice].mes << "]" << endl;
     cout << agenda[indice].compromissos[indice_compromisso].inicio.hora << "h" << (agenda[indice].compromissos[indice_compromisso].inicio.minuto < 10 ? "0"+minutoI : minutoI)<< " ate ";
