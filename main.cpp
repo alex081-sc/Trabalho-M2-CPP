@@ -26,6 +26,7 @@ char ler_char();
 void ordenar_vetor_horarioRec(Compromisso [], int);
 int buscarCompromissoRec(Compromisso [], int, int, int);
 void mostrarCompromisso(Data []);
+
 int main(){
     Data agenda[7];
     int opcao;
@@ -119,7 +120,6 @@ string ler_string(){
     bool valido = true;
     getline(cin, texto);
     do{
-        // 1) tipo: so digitos, nao vazio, tamanho que cabe num int
         if(texto.empty()){
             valido = false;
         }
@@ -367,7 +367,7 @@ void mostrarCompromisso(Data agenda[]){
     }
 
     hora_inicial = ler_numero_inteiro("Hora inicial: ", 0,23);
-    min_inicial = ler_numero_inteiro("Minuto inicial: ", 0,60);
+    min_inicial = ler_numero_inteiro("Minuto inicial: ", 0,59);
     indice_compromisso = buscarCompromissoRec(agenda[indice].compromissos, hora_inicial, min_inicial);
 
     minutoI = to_string(agenda[indice].compromissos[indice_compromisso].inicio.minuto);
