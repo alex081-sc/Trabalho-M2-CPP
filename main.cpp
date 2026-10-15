@@ -1,6 +1,9 @@
 #include <iostream>
 using namespace std;
 
+/*Declaracao de uso de IA: Nesse trabalho, utilizamos IA para organizar as ideias e relembrar a estrutura de validacao de tipo de dados.
+No entanto, conseguimos explicar cada linha das funcoes de entrada de dados*/
+
 typedef struct{
     int hora, minuto;
 } Horario;
@@ -35,6 +38,7 @@ void ImprimirCompromissoNaTela(Compromisso);
 int main(){
     Data agenda[7];
     int opcao;
+    bool iniciado = false;
     string teste;
     string dia_semana[7] = {"domingo", "segunda-feira", "terca-feira", "quarta,feira", "quinta-feira", "sexta-feira", "sabado"};
     do{
@@ -44,27 +48,48 @@ int main(){
             case 1:
                 system("cls");
                 iniciar_agenda(agenda);
+                iniciado = true;
                 system("pause");
             break;
             case 2:
                 system("cls");
-                incluirCompromisso(agenda);
+                if(iniciado){
+                    incluirCompromisso(agenda);
+                    system("pause");
+                    break;
+                }
+                cout << "Erro: Agenda nao foi iniciada..." << endl;
                 system("pause");
             break;
             case 3:
                 system("cls");
-                excluirCompromisso(agenda);
-                cin.ignore();
+                if(iniciado){
+                    excluirCompromisso(agenda);
+                    cin.ignore();
+                    system("pause");
+                    break;
+                }
+                cout << "Erro: Agenda nao foi iniciada..." << endl;
                 system("pause");
             break;
             case 4:
                 system("cls");
-                mostrarCompromisso(agenda);
+                if(iniciado){
+                    mostrarCompromisso(agenda);
+                    system("pause");
+                    break;
+                }
+                cout << "Erro: Agenda nao foi iniciada..." << endl;
                 system("pause");
             break;
             case 5:
                 system("cls");
-                mostrarTodosCompromissos(agenda, dia_semana);
+                if(iniciado){
+                    mostrarTodosCompromissos(agenda, dia_semana);
+                    system("pause");
+                    break;
+                }
+                cout << "Erro: Agenda nao foi iniciada..." << endl;
                 system("pause");
             break;
             case 6:
@@ -79,6 +104,7 @@ int main(){
 }
 
 int ler_numero_inteiro(string mensagem, int minimo, int maximo){
+    /*Essa funcao le a entrada e valida se e do tipo int*/
     string texto;
     int numero;
     bool valido;
@@ -111,7 +137,7 @@ int ler_numero_inteiro(string mensagem, int minimo, int maximo){
                 system("pause");
                 return -1; //para não apagar o menu principal caso o usuário coloque algo errado.
             }else{
-            cout << "Entrada invalida...";
+            cout << "Entrada invalida..." << endl;
             valido = false;
             }
         }
@@ -120,6 +146,7 @@ int ler_numero_inteiro(string mensagem, int minimo, int maximo){
 }
 
 string ler_string(string mensagem){
+    /*Essa funcao le a entrada e valida se e do tipo string*/
     string texto;
     bool valido;
     do{
@@ -147,6 +174,7 @@ string ler_string(string mensagem){
 }
 
 char ler_char(){
+    /*Essa funcao le a entrada e valida se e do tipo char*/
     char caracter;
     bool valido;
     do{
@@ -168,6 +196,7 @@ char ler_char(){
 }
 
 int apresentar_menu(){
+    /*Essa funcao apresenta o menu principal na tela do usuario*/
     int resp_int;
     cout << "--- AGENDA SEMANAL ---" << endl;
     cout << "1. Inicializar data" << endl;
@@ -181,6 +210,7 @@ int apresentar_menu(){
 }
 
 void iniciar_agenda(Data agenda[]){
+     /*Essa funcao inicia a agenda automaticamente com a data inicial informada pelo usuario*/
     int primeira_data = 1;
     int dia, mes, ano;
     char resp1;
@@ -203,9 +233,9 @@ void iniciar_agenda(Data agenda[]){
     if(resp1 == 'N'){
         system("cls");
         cout << "Data de inicio apagada, retornando..." << endl;
-        dia = 0;
-        mes = 0;
-        ano = 0;
+
+
+
         return;
     }else{
         system("cls");
@@ -233,6 +263,7 @@ void iniciar_agenda(Data agenda[]){
 }
 
 void incluirCompromisso(Data agenda[]){
+    /*Essa funcao inclui um compromisso no vetor Data compromissos[], sendo escolhido a data e horario pelo user*/
     int hora_inicial, min_inicial, hora_final, min_final, horaIR, horaFR;
     cout << "--- Incluir Compromisso ---\n";
     cout << "escolha de " << agenda[0].dia << "/" << agenda[0].mes << "/" << agenda[0].ano << " ate " << agenda[6].dia << "/" << agenda[6].mes << "/" << agenda[6].ano << endl;
@@ -281,6 +312,7 @@ void incluirCompromisso(Data agenda[]){
 }
 
  void excluirCompromisso(Data agenda[]){
+    /*Essa funcao busca por um comprimisso para ser excluido, caso seja encontrado, o user devera confirmar a exclusao*/
     cout << "--- Excluir Compromisso ---" << endl;
     int dia, indice, indice_compromisso, hora_inicial, min_inicial;
     string minutoI, minutoF;
@@ -299,7 +331,7 @@ void incluirCompromisso(Data agenda[]){
     indice_compromisso = buscarCompromissoRec(agenda[indice].compromissos, hora_inicial, min_inicial, agenda[indice].qntd_compromissos);
     if(indice_compromisso == -1){ // se for -1, não achou o compromisso
         system("cls");
-        cout << "Erro: Compromisso nao encontrado\n";
+        cout << "Erro: Compromisso nao encontrado" << endl;
         return;
     }
     // Mostrando o compromisso escolhido;
@@ -330,6 +362,7 @@ void incluirCompromisso(Data agenda[]){
 }
 
 void mostrarCompromisso(Data agenda[]){
+    /*Essa funcao busca e mostra todos compromissos de um dia*/
     cout << "--- Mostrar Compromisso ---" << endl;
     int dia, indice;
     string minutoI, minutoF;
@@ -355,11 +388,13 @@ void mostrarCompromisso(Data agenda[]){
 }
 
 void mostrarTodosCompromissos(Data agenda[], string dia_semana[]){
+    /*Essa funcao mostra todos os compromisso da agenda*/
     string minutoI, minutoF;
     cout << "--- Mostrar Todos os Compromissos ---" << endl;
+    cout << "===============" << endl;
     for(int i = 0; i<7; i++){
-        cout << "===============" << endl;
-        cout << "[" << agenda[i].dia << "/" << agenda[i].mes << "]" << endl;
+        cout << "[" << agenda[i].dia << "/" << agenda[i].mes << "/" << agenda[i].ano << "]" << endl;
+
         cout << dia_semana[i] << endl;
         if(agenda[i].qntd_compromissos == 0){
             cout << "Nenhum compromisso agendado." << endl;
@@ -371,11 +406,14 @@ void mostrarTodosCompromissos(Data agenda[], string dia_semana[]){
                 }
             }
         }
+        cout << "===============" << endl;
     }
-    cout << "===============" << endl;
+
 }
 
 int buscarIndiceDiaRec(Data agenda[], int diaB, int indice = 0) { //diaB = dia buscado
+    /*Essa funcao busca o indice do dia de forma recursiva, usado para pesquisar o dia*/
+
     // caso chegue no final do vetor e nao ache
     if (indice > 6) {
         return -1;
@@ -389,6 +427,7 @@ int buscarIndiceDiaRec(Data agenda[], int diaB, int indice = 0) { //diaB = dia b
 }
 
 void ordenar_vetor_horarioRec(Compromisso compromissos[], int n) {
+    /*Essa funcao ordena os horarios dos compromissos de um dia especifico de forma recursiva*/
     if (n <= 1) {
         return;
     }
@@ -418,6 +457,7 @@ void ordenar_vetor_horarioRec(Compromisso compromissos[], int n) {
 }
 
 int buscarCompromissoRec(Compromisso comps[], int horaB, int minB, int n, int indice) { // minB = minuto buscado, horaB = hora buscada
+    /*Essa funcao busca o indice do compromisso especifico de um dia informado pelo user de forma recursiva, usado para pesquisar o compromisso do dia*/
     if (n <= 0) {
         return -1;
     }
