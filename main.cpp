@@ -35,6 +35,7 @@ void ImprimirCompromissoNaTela(Compromisso);
 int main(){
     Data agenda[7];
     int opcao;
+    bool iniciado = false;
     string teste;
     string dia_semana[7] = {"domingo", "segunda-feira", "terca-feira", "quarta,feira", "quinta-feira", "sexta-feira", "sabado"};
     do{
@@ -44,27 +45,48 @@ int main(){
             case 1:
                 system("cls");
                 iniciar_agenda(agenda);
+                iniciado = true;
                 system("pause");
             break;
             case 2:
                 system("cls");
-                incluirCompromisso(agenda);
+                if(iniciado){
+                    incluirCompromisso(agenda);
+                    system("pause");
+                    break;
+                }
+                cout << "Erro: Agenda nao foi iniciada..." << endl;
                 system("pause");
             break;
             case 3:
                 system("cls");
-                excluirCompromisso(agenda);
-                cin.ignore();
+                if(iniciado){
+                    excluirCompromisso(agenda);
+                    cin.ignore();
+                    system("pause");
+                    break;
+                }
+                cout << "Erro: Agenda nao foi iniciada..." << endl;
                 system("pause");
             break;
             case 4:
                 system("cls");
-                mostrarCompromisso(agenda);
+                if(iniciado){
+                    mostrarCompromisso(agenda);
+                    system("pause");
+                    break;
+                }
+                cout << "Erro: Agenda nao foi iniciada..." << endl;
                 system("pause");
             break;
             case 5:
                 system("cls");
-                mostrarTodosCompromissos(agenda, dia_semana);
+                if(iniciado){
+                    mostrarTodosCompromissos(agenda, dia_semana);
+                    system("pause");
+                    break;
+                }
+                cout << "Erro: Agenda nao foi iniciada..." << endl;
                 system("pause");
             break;
             case 6:
@@ -111,7 +133,7 @@ int ler_numero_inteiro(string mensagem, int minimo, int maximo){
                 system("pause");
                 return -1; //para não apagar o menu principal caso o usuário coloque algo errado.
             }else{
-            cout << "Entrada invalida...";
+            cout << "Entrada invalida..." << endl;
             valido = false;
             }
         }
@@ -299,7 +321,7 @@ void incluirCompromisso(Data agenda[]){
     indice_compromisso = buscarCompromissoRec(agenda[indice].compromissos, hora_inicial, min_inicial, agenda[indice].qntd_compromissos);
     if(indice_compromisso == -1){ // se for -1, não achou o compromisso
         system("cls");
-        cout << "Erro: Compromisso nao encontrado\n";
+        cout << "Erro: Compromisso nao encontrado" << endl;
         return;
     }
     // Mostrando o compromisso escolhido;
@@ -358,9 +380,9 @@ void mostrarCompromisso(Data agenda[]){
 void mostrarTodosCompromissos(Data agenda[], string dia_semana[]){
     string minutoI, minutoF;
     cout << "--- Mostrar Todos os Compromissos ---" << endl;
+    cout << "===============" << endl;
     for(int i = 0; i<7; i++){
-        cout << "===============" << endl;
-        cout << "[" << agenda[i].dia << "/" << agenda[i].mes << "]" << endl;
+        cout << "[" << agenda[i].dia << "/" << agenda[i].mes << "/" << agenda[i].ano << "]" << endl;
         cout << dia_semana[i] << endl;
         if(agenda[i].qntd_compromissos == 0){
             cout << "Nenhum compromisso agendado." << endl;
@@ -372,8 +394,9 @@ void mostrarTodosCompromissos(Data agenda[], string dia_semana[]){
                 }
             }
         }
+        cout << "===============" << endl;
     }
-    cout << "===============" << endl;
+
 }
 
 int buscarIndiceDiaRec(Data agenda[], int diaB, int indice = 0) { //diaB = dia buscado
