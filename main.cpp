@@ -28,7 +28,7 @@ int apresentar_menu();
 void iniciar_agenda(Data []);
 void incluirCompromisso(Data []);
 void excluirCompromisso(Data []);
-void mostrarCompromisso(Data []);
+void mostrarCompromisso(Data [], string []);
 void mostrarTodosCompromissos(Data [], string []);
 void ordenar_vetor_horarioRec(Compromisso [], int);
 int buscarCompromissoRec(Compromisso [], int, int, int, int = 0);
@@ -75,7 +75,7 @@ int main(){
             case 4:
                 system("cls");
                 if(iniciado){
-                    mostrarCompromisso(agenda);
+                    mostrarCompromisso(agenda, dia_semana);
                     system("pause");
                     break;
                 }
@@ -202,8 +202,8 @@ int apresentar_menu(){
     cout << "1. Inicializar data" << endl;
     cout << "2. Incluir novo compromisso" << endl;
     cout << "3. Excluir compromisso" << endl;
-    cout << "4. Buscar compromisso" << endl;
-    cout << "5. Consultar todos os compromissos"  << endl;
+    cout << "4. Buscar compromissos de um dia" << endl;
+    cout << "5. Consultar todos os compromissos da semana"  << endl;
     cout << "6. Sair" << endl;
     resp_int = ler_numero_inteiro("Digite a opcao: ", 1, 6);
     return resp_int;
@@ -323,7 +323,7 @@ void incluirCompromisso(Data agenda[]){
 
     if(indice == -1) { // se for -1, não achou o dia;
         system("cls");
-        cout << "Erro: Dia fora da semana da agenda!\n";
+        cout << "Erro: Dia fora da semana da agenda!" << endl;
         return;
     }
     hora_inicial = ler_numero_inteiro("Hora inicial: ", 0,23);
@@ -361,7 +361,7 @@ void incluirCompromisso(Data agenda[]){
 
 }
 
-void mostrarCompromisso(Data agenda[]){
+void mostrarCompromisso(Data agenda[], string dia_semana[]){
     /*Essa funcao busca e mostra todos compromissos de um dia*/
     cout << "--- Mostrar Compromisso ---" << endl;
     int dia, indice;
@@ -381,8 +381,10 @@ void mostrarCompromisso(Data agenda[]){
     }
 
     cout << "[" << agenda[indice].dia << "/" << agenda[indice].mes << "]" << endl;
+
     for(int j = 0; j < agenda[indice].qntd_compromissos; j++){
         ImprimirCompromissoNaTela(agenda[indice].compromissos[j]);
+        cout << dia_semana[j] << endl;
     }
     cout << "===============" << endl;
 }
