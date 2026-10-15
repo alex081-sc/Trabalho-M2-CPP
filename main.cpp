@@ -341,6 +341,11 @@ void mostrarCompromisso(Data agenda[]){
         cout << "Erro: Dia fora da semana da agenda!\n";
         return;
     }
+    if(agenda[indice].qntd_compromissos ==0){
+        system("cls");
+        cout << "Erro: Nenhum compromisso agendado para esse dia!";
+        return;
+    }
 
     cout << "[" << agenda[indice].dia << "/" << agenda[indice].mes << "]" << endl;
     for(int j = 0; j < agenda[indice].qntd_compromissos; j++){
